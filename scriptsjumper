@@ -1,0 +1,30 @@
+#!/bin/bash
+/usr/local/bin/badvpn-udpgw --listen-addr 127.0.0.1:7300
+
+ ssh -o "StrictHostKeyChecking=no" mypc7@ssh-j.com -N -R device1:22:localhost:22
+ [Unit]
+Description=SSH jumper
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=Simple
+ExecStart=/usr/bin/bash /home/ssm_server/jump.sh
+Restart = on-failure
+Restart = 5s
+
+[Install]
+WantedBy=multi-user.target
+[Unit]
+Description=UDP gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=Simple
+ExecStart=/usr/bin/bash /home/ssm_server/badudp.sh
+Restart = on-failure
+Restart = 5s
+
+[Install]
+WantedBy=multi-user.target
